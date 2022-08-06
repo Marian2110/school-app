@@ -3,10 +3,7 @@ package com.example.schoolapp.controller;
 import com.example.schoolapp.model.entity.Student;
 import com.example.schoolapp.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,11 @@ public class StudentController {
     @PostMapping
     public Student addStudent(final Student student) {
         return studentService.addStudent(student);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteStudent(@PathVariable final String id) {
+        studentService.deleteStudent(id);
     }
 }
 
