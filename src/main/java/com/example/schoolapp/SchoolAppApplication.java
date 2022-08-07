@@ -19,7 +19,7 @@ public class SchoolAppApplication {
         SpringApplication.run(SchoolAppApplication.class, args);
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner addStudents(StudentService studentService) {
         return args -> {
             studentService.addStudent(Student.builder()
@@ -37,7 +37,7 @@ public class SchoolAppApplication {
         };
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner addTeachers(TeacherService teacherService) {
         return args -> {
             teacherService.addTeacher(Teacher.builder()

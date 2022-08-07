@@ -22,14 +22,14 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return studentService.findByName(username)
-                .map(student -> new UserDetails(student.name(), getUserPasswordById(student.id()), List.of("STUDENT")))
+                .map(student -> new UserDetails(student.name(), getUserPasswordById(student.id()), List.of("ROLE_STUDENT")))
                 .orElseGet(() -> teacherService.findByName(username)
                         .map(teacher -> new UserDetails(teacher.name(), getUserPasswordById(teacher.id()), getTeacherRoles(teacher.isAdmin())))
                         .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 
     private List<String> getTeacherRoles(Boolean admin) {
-        return Boolean.TRUE.equals(admin) ? List.of("TEACHER", "ADMIN") : List.of("TEACHER");
+        return Boolean.TRUE.equals(admin) ? List.of("ROLE_TEACHER", "ROLE_ADMIN") : List.of("ROLE_TEACHER");
     }
 
     private String getUserPasswordById(String id) {
