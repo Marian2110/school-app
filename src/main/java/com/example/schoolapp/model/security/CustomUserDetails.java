@@ -2,15 +2,17 @@ package com.example.schoolapp.model.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public record UserDetails(
+public record CustomUserDetails(
         String username,
         String password,
-        List<String> roles) implements org.springframework.security.core.userdetails.UserDetails {
+        String userClass,
+        List<String> roles) implements UserDetails {
     public String getUsername() {
         return username;
     }
@@ -33,6 +35,10 @@ public record UserDetails(
 
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getUserClass() {
+        return userClass;
     }
 
     @Override

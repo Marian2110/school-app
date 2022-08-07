@@ -1,10 +1,10 @@
 package com.example.schoolapp.config;
 
+import com.example.schoolapp.model.security.CustomUserDetails;
 import com.example.schoolapp.model.security.User;
-import com.example.schoolapp.model.security.UserDetails;
-import com.example.schoolapp.service.UserService;
 import com.example.schoolapp.service.StudentService;
 import com.example.schoolapp.service.TeacherService;
+import com.example.schoolapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +22,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return studentService.findByName(username)
-                .map(student -> new UserDetails(student.name(), getUserPasswordById(student.id()), List.of("ROLE_STUDENT")))
+                .map(student -> new CustomUserDetails(student.name(), getUserPasswordById(student.id()), student.attendingClass(), List.of("ROLE_STUDENT")))
                 .orElseGet(() -> teacherService.findByName(username)
-                        .map(teacher -> new UserDetails(teacher.name(), getUserPasswordById(teacher.id()), getTeacherRoles(teacher.isAdmin())))
+                        .map(teacher -> new CustomUserDetails(teacher.name(), getUserPasswordById(teacher.id()), teacher.assignedClass(), getTeacherRoles(teacher.isAdmin())))
                         .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 

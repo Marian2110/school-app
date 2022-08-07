@@ -5,7 +5,6 @@ import com.example.schoolapp.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +17,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final UserService userService;
 
-
-    // Asa nu merge, astept feedback
-    @PostFilter("hasRole('TEACHER') OR hasRole('ADMIN') OR filterObject.attendingClass() == studentService.getStudentClassByName(authentication.name)")
+    @PostFilter("hasRole('TEACHER') OR hasRole('ADMIN') OR filterObject.attendingClass() == authentication.principal.userClass")
     public List<Student> getStudents() {
         return studentRepository.findAll();
     }
@@ -43,6 +40,6 @@ public class StudentService {
     public String getStudentClassByName(String name) {
         return studentRepository.findByName(name)
                 .map(Student::attendingClass)
-                .orElseThrow( () -> new IllegalArgumentException("Student with name " + name + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Student with name " + name + " not found"));
     }
 }
